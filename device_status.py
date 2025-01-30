@@ -48,7 +48,7 @@ def monitor_device(ip, logger):
             
             previous_status = current_status
         
-        logger.debug(f"Checked device {ip} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        logger.debug(f"Checked device {ip} working at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
         time.sleep(180) 
 if __name__ == "__main__":

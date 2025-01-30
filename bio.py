@@ -3,6 +3,7 @@ import json
 import datetime
 import logging
 import time
+import sys
 from logging.handlers import RotatingFileHandler
 from zk import ZK
 import local_config
@@ -11,7 +12,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-SYNC_INTERVAL = 3 * 60  
+SYNC_INTERVAL = 2 * 60  # 3 minutes
 LAST_SYNC_FILE = 'last_sync_time.json'
 
 device_punch_values_IN = getattr(local_config, 'device_punch_values_IN', [0, 4])
@@ -53,7 +54,6 @@ def send_email(subject, body):
         msg['From'] = EMAIL_SENDER
         msg['To'] = EMAIL_RECEIVER
         msg['Subject'] = subject
-        
         msg.attach(MIMEText(body, 'plain'))
         
         with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
@@ -76,7 +76,7 @@ def update_last_sync_time():
         json.dump({'last_sync_time': last_sync_time}, f)
 def get_all_attendance_from_device(ip, device_id, last_sync_time, retries=3, delay=5):
     """Fetch attendance logs from the device with retry logic."""
-    zk = ZK(ip)
+    zk = ZK(ip,timeout=60)
     conn = None
     attendances = []
     attempt = 0 
@@ -115,7 +115,6 @@ def check_employee_status(employee):
     except requests.exceptions.RequestException as e:
         error_logger.error(f"Request exception while checking status for {employee}: {e}")
         return False
-    
 def record_exists_in_erpnext(employee, timestamp):
     """Check if an attendance record already exists in ERPNext."""
     try:
@@ -163,135 +162,73 @@ def send_to_erpnext(employee, timestamp, log_type):
             return response.status_code, response.text
     except requests.exceptions.RequestException as e:
         return 500, str(e)
+
 def export_biometric_data_and_exit(last_sync_time):
-    """Export biometric data for the date and exit after summary."""
+    """Export biometric data and exit on success."""
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     print(f"Processing biometric data for date: {date}")
     print(f"Please wait a moment, the attendance is being processed into TSL kernel...")
 
-    output_file = os.path.join(local_config.LOGS_DIRECTORY, f"biometric_data_{date}.json")
-    data_to_export = []
-    failed_logs = []
-    not_active_logs = []
     success_logs = []
 
     try:
         for device in local_config.devices:
             logs = get_all_attendance_from_device(device['ip'], device['device_id'], last_sync_time)
-            filtered_logs = []
 
             for log in logs:
-                punch_time = log.timestamp
-                punch_hour = punch_time.hour
+                user_id = f"T{int(log.user_id):06d}"
+                timestamp = log.timestamp.strftime('%Y-%m-%d %H:%M:%S')
 
-                # Determine punch direction based on time
-                punch_direction = 'IN' if 8 <= punch_hour < 15 else 'OUT'
+                log_type = "IN" if 8 <= log.timestamp.hour < 15 else "OUT"
 
-                filtered_logs.append({
-                    'user_id': f"T{int(log.user_id):06d}",
-                    'timestamp': punch_time.strftime('%Y-%m-%d %H:%M:%S'),
-                    'punch_direction': punch_direction,
-                    'log_type': punch_direction
-                })
+                if check_employee_status(user_id):
+                    status_code, message = send_to_erpnext(user_id, timestamp, log_type)
+                    if status_code == 200:
+                        success_logs.append(log)
 
-            data_to_export.extend(filtered_logs)
-    
     except Exception as e:
-        error_logger.error(f"Error collecting logs: {e}")
-        return
+        error_logger.error(f"Error processing biometric data: {e}")
+        raise  # Let the main loop handle retry
 
-    # Load existing data to prevent duplicate entries
-    if os.path.exists(output_file):
-        try:
-            with open(output_file, 'r') as f:
-                existing_data = json.load(f)
-            data_to_export = existing_data + data_to_export  # Append new data to existing data
-        except Exception as e:
-            error_logger.error(f"Error reading existing file {output_file}: {e}")
-            return
-
-    # Deduplicate logs before processing
-    unique_data = {f"{log['user_id']}_{log['timestamp']}": log for log in data_to_export}
-    data_to_export = list(unique_data.values())
-
-    # Save attendance logs to a file (overwrite with unique records)
-    try:
-        with open(output_file, 'w') as f:
-            json.dump(data_to_export, f, indent=4)
-    except Exception as e:
-        error_logger.error(f"Error writing logs to file: {e}")
-
-    total_logs = len(data_to_export)
-    if total_logs > 0:
-        print("\n[********* Sending logs to kernel]")
-
-    # Process only newly fetched logs
-    new_logs = [log for log in data_to_export if log in filtered_logs]
-
-    for i, log in enumerate(new_logs):
-        percentage = int((i + 1) / len(new_logs) * 100)
-        print(f"\r[********* Sending {percentage}%]", end="")
-
-        user_id = log['user_id']
-        timestamp = log['timestamp']
-        log_type = log['log_type']
-
-        if check_employee_status(user_id):
-            status_code, message = send_to_erpnext(user_id, timestamp, log_type)
-            if status_code == 200:
-                success_logs.append(log)
-                attendance_success_logger.info(f"Success: {user_id} at {timestamp} ({log_type}) - {message}")
-            else:
-                failed_logs.append(log)
-                attendance_failed_logger.error(f"Failed: {user_id} at {timestamp} ({log_type}) - {message}")
-        else:
-            not_active_logs.append(log)
-            attendance_failed_logger.error(f"Not active: {user_id} at {timestamp} ({log_type})")
-
+    print("\n[********* Sending logs to kernel]")
     print("\nSummary:")
     print(f" - Last sync time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print(f" - Not active: {len(not_active_logs)}")
-    print(f" - Failed to push: {len(failed_logs)}")
-    print(f" - Successfully pushed: {len(success_logs)}")  
-    
+    print(f" - Successfully pushed: {len(success_logs)}")
+
     if success_logs:
         update_last_sync_time()
-        exit(0)  
+        sys.exit(0)  
     else:
-        raise Exception("No records pushed, retrying...") 
-
+        raise Exception("No records pushed, retrying...")  
 def get_recent_errors():
+    """Retrieve recent errors from log file."""
     current_date = datetime.datetime.now().strftime('%d-%m-%Y') 
     error_log_file = os.path.join(local_config.LOGS_DIRECTORY, f"{current_date}__biometric_error_logger.log")
 
-    recent_errors = []
     try:
         if os.path.exists(error_log_file):
             with open(error_log_file, 'r') as f:
-                lines = f.readlines()
-                recent_errors = lines[-5:] 
-        else:
-            recent_errors = ["No recent errors found."]
+                return '\n'.join(f.readlines()[-5:])
     except Exception as e:
         error_logger.error(f"Failed to read error log: {e}")
-        recent_errors = [f"Error reading log: {e}"]
 
-    return '\n'.join(recent_errors)
+    return "No recent errors found."
 
 if __name__ == "__main__":
     while True:
         try:
             last_sync_time_str = get_last_sync_time()
             last_sync_time = datetime.datetime.strptime(last_sync_time_str, '%Y-%m-%d %H:%M:%S') if last_sync_time_str else datetime.datetime.now() - datetime.timedelta(days=1)
-            export_biometric_data_and_exit(last_sync_time)
+
+            export_biometric_data_and_exit(last_sync_time) 
         except Exception as e:
             error_logger.error(f"Error during execution: {e}")
             recent_errors = get_recent_errors() 
+
             send_email(
                 "Biometric Device Execution Error",
                 f"An error occurred during execution:\n\n{e}\n\nRecent Errors:\n{recent_errors}"
             )
+
             print("❌ Error encountered! Retrying in 2 minutes...")
-            time.sleep(SYNC_INTERVAL)  
-
-
+            time.sleep(SYNC_INTERVAL)  # Retry after 3 minutes
