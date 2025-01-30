@@ -1,0 +1,5 @@
+requests
+pickledb
+pyzk
+PyQt5
+tqdm
