@@ -1,0 +1,470 @@
+[
+    {
+        "user_id": "T000042",
+        "timestamp": "2025-01-30 17:27:10",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-30 17:49:16",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000071",
+        "timestamp": "2025-01-30 17:49:18",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000001",
+        "timestamp": "2025-01-30 17:53:48",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000015",
+        "timestamp": "2025-01-30 18:04:44",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000039",
+        "timestamp": "2025-01-30 18:27:03",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000060",
+        "timestamp": "2025-01-30 18:28:37",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000039",
+        "timestamp": "2025-01-30 18:28:45",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000068",
+        "timestamp": "2025-01-30 18:28:51",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000075",
+        "timestamp": "2025-01-30 18:34:21",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000042",
+        "timestamp": "2025-01-30 18:34:44",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000002",
+        "timestamp": "2025-01-30 18:34:55",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000046",
+        "timestamp": "2025-01-30 18:36:09",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000086",
+        "timestamp": "2025-01-30 18:56:04",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000084",
+        "timestamp": "2025-01-30 18:56:26",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000049",
+        "timestamp": "2025-01-30 18:56:32",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000081",
+        "timestamp": "2025-01-30 18:59:22",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000085",
+        "timestamp": "2025-01-30 19:04:08",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000080",
+        "timestamp": "2025-01-30 19:05:22",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000072",
+        "timestamp": "2025-01-30 19:14:23",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000076",
+        "timestamp": "2025-01-30 19:18:13",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000082",
+        "timestamp": "2025-01-30 19:18:16",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000076",
+        "timestamp": "2025-01-30 19:21:00",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000065",
+        "timestamp": "2025-01-30 19:24:05",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000028",
+        "timestamp": "2025-01-30 19:33:15",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000041",
+        "timestamp": "2025-01-30 19:33:16",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000012",
+        "timestamp": "2025-01-30 19:33:20",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000031",
+        "timestamp": "2025-01-30 19:33:22",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000012",
+        "timestamp": "2025-01-30 19:35:44",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000053",
+        "timestamp": "2025-01-30 19:39:33",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000063",
+        "timestamp": "2025-01-30 19:49:55",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000063",
+        "timestamp": "2025-01-30 19:51:28",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000056",
+        "timestamp": "2025-01-30 19:51:47",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000073",
+        "timestamp": "2025-01-30 19:58:27",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-30 20:08:22",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000071",
+        "timestamp": "2025-01-30 20:11:02",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000071",
+        "timestamp": "2025-01-30 20:23:08",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-30 20:23:34",
+        "punch_direction": "OUT",
+        "log_type": "OUT"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-31 09:09:07",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000015",
+        "timestamp": "2025-01-31 10:07:25",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-31 10:12:36",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000015",
+        "timestamp": "2025-01-31 10:24:33",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000068",
+        "timestamp": "2025-01-31 10:26:05",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000001",
+        "timestamp": "2025-01-31 10:29:06",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000071",
+        "timestamp": "2025-01-31 10:29:38",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-31 10:32:20",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000060",
+        "timestamp": "2025-01-31 10:40:48",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000082",
+        "timestamp": "2025-01-31 10:40:52",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000077",
+        "timestamp": "2025-01-31 10:42:27",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000031",
+        "timestamp": "2025-01-31 10:42:31",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000085",
+        "timestamp": "2025-01-31 10:42:34",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000084",
+        "timestamp": "2025-01-31 10:44:31",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000086",
+        "timestamp": "2025-01-31 10:44:34",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-31 10:45:35",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000063",
+        "timestamp": "2025-01-31 10:54:38",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000075",
+        "timestamp": "2025-01-31 10:55:16",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000065",
+        "timestamp": "2025-01-31 10:57:00",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000080",
+        "timestamp": "2025-01-31 11:00:58",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000076",
+        "timestamp": "2025-01-31 11:01:25",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000059",
+        "timestamp": "2025-01-31 11:03:33",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000081",
+        "timestamp": "2025-01-31 11:03:40",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000073",
+        "timestamp": "2025-01-31 11:03:59",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000039",
+        "timestamp": "2025-01-31 11:04:29",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000041",
+        "timestamp": "2025-01-31 11:06:55",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000072",
+        "timestamp": "2025-01-31 11:15:43",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000056",
+        "timestamp": "2025-01-31 11:16:54",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-31 11:19:04",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000078",
+        "timestamp": "2025-01-31 11:26:31",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000012",
+        "timestamp": "2025-01-31 11:26:39",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000026",
+        "timestamp": "2025-01-31 11:27:47",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000042",
+        "timestamp": "2025-01-31 11:31:48",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000046",
+        "timestamp": "2025-01-31 11:31:49",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000053",
+        "timestamp": "2025-01-31 11:33:51",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000012",
+        "timestamp": "2025-01-31 11:40:34",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000002",
+        "timestamp": "2025-01-31 11:41:17",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000040",
+        "timestamp": "2025-01-31 11:51:10",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000049",
+        "timestamp": "2025-01-31 11:51:32",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    },
+    {
+        "user_id": "T000077",
+        "timestamp": "2025-01-31 11:56:45",
+        "punch_direction": "IN",
+        "log_type": "IN"
+    }
+]

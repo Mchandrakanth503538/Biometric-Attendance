@@ -63,7 +63,21 @@ def send_email(subject, body):
             server.quit()
     except Exception as e:
         error_logger.error(f"Failed to send email: {e}")
-
+def cleanup_old_biometric_files():
+    """Deletes old biometric_data_{date}.json files at the end of the day."""
+    current_date = datetime.datetime.now().strftime('%Y-%m-%d')
+    for file in os.listdir(local_config.LOGS_DIRECTORY):
+        if file.startswith("biometric_data_") and file.endswith(".json"):
+            date_part = file.replace("biometric_data_", "").replace(".json", "")
+            try:
+                file_date = datetime.datetime.strptime(date_part, '%d-%m-%Y') if '-' in date_part and date_part[2] == '-' else datetime.datetime.strptime(date_part, '%Y-%m-%d')
+                if file_date.strftime('%Y-%m-%d') < current_date:
+                    file_path = os.path.join(local_config.LOGS_DIRECTORY, file)
+                    os.remove(file_path) 
+                    info_logger.info(f"Deleted old biometric data file: {file}")
+            except ValueError:
+                error_logger.error(f"Unexpected file format: {file}") 
+                continue
 def get_last_sync_time():
     if os.path.exists(LAST_SYNC_FILE):
         with open(LAST_SYNC_FILE, 'r') as f:
@@ -132,7 +146,7 @@ def record_exists_in_erpnext(employee, timestamp):
         
         if response.status_code == 200:
             data = response.json().get('data', [])
-            return bool(data)  # True if record exists, False otherwise
+            return bool(data)  
         else:
             error_logger.error(f"Failed to check existing record for {employee} at {timestamp}: {response.text}")
             return False
@@ -144,8 +158,9 @@ def record_exists_in_erpnext(employee, timestamp):
 def send_to_erpnext(employee, timestamp, log_type):
     """Send new attendance record to ERPNext only if it does not already exist."""
     if record_exists_in_erpnext(employee, timestamp):
-        info_logger.info(f"Skipping record for {employee} at {timestamp} - already exists in ERPNext.")
-        return 200, "Record already exists"
+        attendance_failed_logger.error(f"Skipped: {employee} at {timestamp} ({log_type}) - Record already exists")
+        return 409, "Record already exists"   
+
 
     try:
         url = local_config.ERPNEXT_URL + "/api/resource/Employee Checkin"
@@ -167,7 +182,7 @@ def export_biometric_data_and_exit(last_sync_time):
     """Export biometric data for the date and exit after summary."""
     date = datetime.datetime.now().strftime('%Y-%m-%d')
     print(f"Processing biometric data for date: {date}")
-    print(f"Please wait a moment, the attendance is being processed into TSL kernel...")
+    print(f"Please wait a moment ############...")
 
     output_file = os.path.join(local_config.LOGS_DIRECTORY, f"biometric_data_{date}.json")
     data_to_export = []
@@ -183,38 +198,27 @@ def export_biometric_data_and_exit(last_sync_time):
             for log in logs:
                 punch_time = log.timestamp
                 punch_hour = punch_time.hour
-
-                # Determine punch direction based on time
-                punch_direction = 'IN' if 8 <= punch_hour < 15 else 'OUT'
-
+                punch_direction = 'IN' if 8 <= punch_hour < 17 else 'OUT'
                 filtered_logs.append({
                     'user_id': f"T{int(log.user_id):06d}",
                     'timestamp': punch_time.strftime('%Y-%m-%d %H:%M:%S'),
                     'punch_direction': punch_direction,
                     'log_type': punch_direction
                 })
-
             data_to_export.extend(filtered_logs)
-    
     except Exception as e:
         error_logger.error(f"Error collecting logs: {e}")
         return
-
-    # Load existing data to prevent duplicate entries
     if os.path.exists(output_file):
         try:
             with open(output_file, 'r') as f:
                 existing_data = json.load(f)
-            data_to_export = existing_data + data_to_export  # Append new data to existing data
+            data_to_export = existing_data + data_to_export  
         except Exception as e:
             error_logger.error(f"Error reading existing file {output_file}: {e}")
             return
-
-    # Deduplicate logs before processing
     unique_data = {f"{log['user_id']}_{log['timestamp']}": log for log in data_to_export}
     data_to_export = list(unique_data.values())
-
-    # Save attendance logs to a file (overwrite with unique records)
     try:
         with open(output_file, 'w') as f:
             json.dump(data_to_export, f, indent=4)
@@ -224,8 +228,6 @@ def export_biometric_data_and_exit(last_sync_time):
     total_logs = len(data_to_export)
     if total_logs > 0:
         print("\n[********* Sending logs to kernel]")
-
-    # Process only newly fetched logs
     new_logs = [log for log in data_to_export if log in filtered_logs]
 
     for i, log in enumerate(new_logs):
@@ -253,45 +255,41 @@ def export_biometric_data_and_exit(last_sync_time):
     print(f" - Not active: {len(not_active_logs)}")
     print(f" - Failed to push: {len(failed_logs)}")
     print(f" - Successfully pushed: {len(success_logs)}")  
-    
+    update_last_sync_time()
     if success_logs:
         update_last_sync_time()
         exit(0)  
     else:
-        raise Exception("No records pushed, retrying...") 
-
+        attendance_success_logger.info(f"There is no records exist from Last sync time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}") 
+    exit(0)
 def get_recent_errors():
+    """Retrieve recent errors from log file."""
     current_date = datetime.datetime.now().strftime('%d-%m-%Y') 
-    error_log_file = os.path.join(local_config.LOGS_DIRECTORY, f"{current_date}__biometric_error_logger.log")
-
-    recent_errors = []
+    error_log_file = os.path.join(local_config.LOGS_DIRECTORY, f"{current_date}__biometric_error_logger.log")                 
     try:
         if os.path.exists(error_log_file):
             with open(error_log_file, 'r') as f:
-                lines = f.readlines()
-                recent_errors = lines[-5:] 
-        else:
-            recent_errors = ["No recent errors found."]
+                return '\n'.join(f.readlines()[-5:])                                                        
     except Exception as e:
         error_logger.error(f"Failed to read error log: {e}")
-        recent_errors = [f"Error reading log: {e}"]
-
-    return '\n'.join(recent_errors)
-
+    return "No recent errors found."
 if __name__ == "__main__":
-    while True:
+     cleanup_old_biometric_files()
+     while True:
         try:
             last_sync_time_str = get_last_sync_time()
             last_sync_time = datetime.datetime.strptime(last_sync_time_str, '%Y-%m-%d %H:%M:%S') if last_sync_time_str else datetime.datetime.now() - datetime.timedelta(days=1)
-            export_biometric_data_and_exit(last_sync_time)
+
+            export_biometric_data_and_exit(last_sync_time) 
         except Exception as e:
             error_logger.error(f"Error during execution: {e}")
             recent_errors = get_recent_errors() 
+
             send_email(
                 "Biometric Device Execution Error",
                 f"An error occurred during execution:\n\n{e}\n\nRecent Errors:\n{recent_errors}"
             )
+
             print("❌ Error encountered! Retrying in 2 minutes...")
             time.sleep(SYNC_INTERVAL)  
-
 
